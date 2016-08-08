@@ -1,0 +1,45 @@
+CME1
+bgx	# default: 0
+bgy	# default: 0
+mapx	# width of map
+mapy	# height of map
+back	# default: 0
+nbrOfPolys
+selected	# default: 0
+polysel		# default: 0
+pos		# default: 0
+
+for (nbrOfPolys) {
+name	# name without extension
+disabled	# default: 0
+center_x
+center_y
+center_z	# default: 0
+height		# default: 0
+radio		# default: 0
+nbrOfPoints	# default: 0
+for (nbrOfPoints) {
+point_name
+point_disabled
+point_x
+point_y
+}
+nbrOfTiles
+for (nbrOfTiles) {
+tile_name	# full path to bitmap
+tile_name2	# Commandos tile name (*.RLE or *.BMP)
+isRle		# 1 or 0
+tile_hide	
+tile_disabled
+tile_offx
+tile_offy
+tile_w		# width
+tile_h		# height
+tile_m		# mirror
+tile_f		# flip
+tile_l		# light
+tile_x		# x pos
+tile_y		# y pos
+}
+}
+EOF

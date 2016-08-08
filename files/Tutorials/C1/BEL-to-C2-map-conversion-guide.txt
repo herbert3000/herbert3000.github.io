@@ -1,0 +1,104 @@
+Step 1: Create the Y64 file
+
+To do this we will have to get an image of the whole map
+
+1.1:
+Rename the folders LIBRETAS and GLOBAL (for example in GLOBAL-BACKUP)
+DATOS\RECURSOS\BMP\SYSTEM\LIBRETAS
+DATOS\RECURSOS\BMP\SYSTEM\GLOBAL
+
+1.2:
+Get a debug version of the COMANDOS.EXE and set the resolution to the highest possible (use the Resolution Fix by StevenH)
+
+1.3:
+If you don't have Windows 8.1: get a progam that automatically saves a screenshot if you press the PRINT key. In Windows 8.1 you can press WINDOWS+PRINT and the screenshots will be saved in your Pictures folder
+
+1.4:
+Start the game, set the resolution to highest, start the mission you want to convert.
+Now press CTRL+O (the letter O not the number zero), this will freeze the game.
+Press ESC and restart the mission. Skip the briefing, now there shouldn't be any soldiers on the map anymore. (Hint: if you press SHIFT+L you can see that all soldiers are now in the upper left corner of the map, for this part you'll have to create a screenshot of the running game).
+
+1.5:
+Take screenshots to cover the whole map (see 1.3) and piece the screenshots together to obtain an image of the whole map (you can use Photoshop, GIMP or similar programs - I wouldn't use MS Paint).
+
+1.6:
+Create the Description.ini of the Y64 file.
+Just extract an existing Y64, for example TU01.Y64 and edit the Description.ini
+Set NumberView = 1
+Set NumPic = 6
+
+Scale the image from 1.5 with these scale factors and rename them accordingly:
+100% 0_0.bmp
+70% 0_1.bmp
+50% 0_2.bmp
+35% 0_3.bmp
+25% 0_4.bmp
+17% 0.5.bmp
+
+Write the [(Pic(0,0)] entries in the ini file with the width and height of the scaled images
+The first value of the Pic is always 0, the second one is 0-5, like the names of the bmps:
+[(Pic(0,0)]
+[(Pic(0,1)]
+[(Pic(0,2)]
+[(Pic(0,3)]
+[(Pic(0,4)]
+[(Pic(0,5)]
+
+Drag & Drop the *.Y64.files folder onto the ImageConverter.exe of the Commandos Developing Toolkit
+
+
+Step 2: Get the water mask - of course you'll have to do this if there's water on the map :)
+
+2.1:
+Make a copy the VOL file you want to convert. In this file delete all POLY blocks except for the "BASE" POLY. Exract the WAD file of the map.
+
+2.2:
+Select the VOL and the folder of the extracted WAD (not just select the folder, double-click it) when you start the vol_reader.exe
+Press S until you only see the mask of the water
+PRESS F11 to save an image of the whole map
+
+Edit this image and recolor it so all parts have the correct color:
+Deep water = RGB(127,127,127)
+Shallow water = RGB(255,255,255)
+Land = RGB(0,0,0)
+
+Save the image as PNG
+
+
+Step 3: Convert the SEC file
+
+Use the SEC java file from this location to convert the BEL SEC to the C2 format:
+https://sites.google.com/site/belcommandos/Home/C1-to-C2-Tools.zip?attredirects=0&d=1
+
+
+Step 4: Create the MA2 file
+
+Use the MA2 java file from the C1-to-C2-Tools package to convert the VOL+WAD to a MA2 description folder.
+
+4.1:
+If there's water on the map, get the image from step 2, rename it to WaterMask_0.png and store it in the *.MA2.xfiles folder.
+Open the file Description.xml, go to the <WaterMaskInfo> section and replace <WaterMaskInfoBlockSerializationData /> with this block: 
+    <WaterMaskInfoBlockSerializationData>
+      <WaterMaskPath>WaterMask_0.png</WaterMaskPath>
+    </WaterMaskInfoBlockSerializationData>
+Save the file
+
+4.2:
+Drag & Drop the *.MA2.xfiles folder onto the XmlConverter.exe of the Commandos Developing Toolkit
+
+
+Step 5: Create basic MIS and BAS files for testing
+
+Set the correct files in the CARGADINAMICA, FICHERO, SECTORES attributes
+Also the AGUA and SPEEDAGUA thing if there's water on the map.
+
+ 
+The next steps would be the explosions, animations (like flags) and of course the MIS editing,
+but I think you don't need a guide for this :D
+
+
+One last thing:
+When I converted the BEL maps, I scaled them by a factor of 1.3
+If you also want to do this, you'll have to scale the sprites of the VOL file and the images of the whole map (and of the water mask) before you convert them to MA2 and Y64.
+If you like I can write you a guide how to batch convert the sprites using IrfanView.
+If you run the C1-to-C2-Tools, you can set the scale factor in the command line (see ReadMe)

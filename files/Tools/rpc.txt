@@ -1,0 +1,94 @@
+Commandos Strike Force "*.rpc"
+
+uses RenderWare file format:
+4 byte - DWORD - section identifier
+4 byte - DWORD - section size, including child sections and/or data
+4 byte - DWORD - RW version ID (always 37 00 02 1C)
+
+Kuvelwagen_con_capota_L1.rpc
+
+10000000 	# rpc file
+--01000000	# data: numModels,00000000,00000000
+--0E000000	# model definitions
+----01000000	# data: 18000000 = numObjects
+		for (numObjects) {
+			float[12]	transformationMatrix
+			int32   	parent
+			int32   	unknown (always 3)
+		}
+    for (numObjects) {
+----03000000	# model info
+------00FFFFFF	# data:
+		uint32	unknown (always 1)
+		uint32	hasName (0 or 1)
+		if (hasName) {
+			uint32	unknown (maybe id)
+			uint32	nameLength
+			char[nameLength]	name (not null-terminated)
+		}
+    }
+--1A000000	# model section
+----01000000	# data: uint32 (0x0A = numModels)
+----0F000000	# model geometry
+------01000000	# data:
+	uint16:	unknown
+	unit16:	hasUV (0 or 1)
+	uint32: numFaces
+	uint32: numVertices
+	uint32: unknown (1) #UVstar
+
+	for (numVertices) {
+		float u
+		float v (needs to be inverted)
+	}
+
+	for (numFaces) {
+		uint16 index1
+		uint16 index2
+		uint16 faceMaterial
+		uint16 index3
+		# new Face(index1, index3, index2)
+	}
+
+	bytes[18] unknown
+
+	for (numVertices) {
+		float x
+		float y
+		float z
+	}
+
+	for (numVertices) {
+		float vnx
+		float vny
+		float vnz
+	}
+
+------08000000	# 
+--------01000000	# data: 01000000, FFFFFFFF
+--------07000000	# texture
+----------01000000	# data: 00000000 FFFFFFFF 1499F610 01000000 0000803F 00000000 0000803F
+----------06000000	# 
+------------01000000	# data: 06 11 01 00
+------------02000000	# textureName (null-terminated)
+------------02000000	# 00 01 00 00
+------------03000000	#
+--------------27010000	# 02 00 00 00
+----------03000000
+------------00FFFFFF	# data: 02000000 01000000 00000000 00000000 FF000000 0B000000 00000000 00000000
+------03000000
+--------0E050000	# data: 00000000 01000000 06000000 06000000 00000000 02000000 00000000 03000000 02000000 03000000 01000000
+--------1F010000	# data:
+			3
+			9,"hayTagID\0",1,1,1
+			B,"bNivelTest\0",1,1,0
+			D,"FVF.UserData\0",1,1,03300000
+
+for (numModels) {
+--14000000
+----01000000	# 2,0,5,0	= modelInfoId, modelGeometryId, ?, ?
+----03000000
+------00FFFFFF	# 0B000000 C9000000 00000000 00000000 00000000 20000000 01000000 00000000 FFFFFFFF 02000000 00000000 00000000 00000000 FFFFFFFF 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+}
+
+--03000000	# empty

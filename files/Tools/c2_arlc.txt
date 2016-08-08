@@ -1,0 +1,60 @@
+tst.arlc
+========
+
+info    bytes   type    example.hex     example
+===============================================
+mag.w.    4     str     72 6C 63 41        rlcA // mag.w. = magic word
+width     4     int     80 02 00 00         640
+height    4     int     E0 01 00 00         480
+numAnim   4     int     02 00 00 00           2 // number of animations
+
+pixeldata[2*height*width] // 16-Bit (R5 G6 B5)
+
+for (numAnim)
+
+info    bytes   type    example.hex     example
+===============================================
+mag.w.    4     str     72 6C 63 53        rlcS
+name     32     str     54 6F 72 ...    TorzosB // null-terminated
+numImg    4     int     33 00 00 00          51
+offset_x  4     float   00 80 DC 43         441 // position of the animation
+offset_y  4     float   00 00 00 00           0 //   on the screen
+
+for (numImg)
+
+info    bytes   type    example.hex     example
+===============================================
+mag.w.    4     str     72 6C 63 20        rlc 
+width     4     int     19 01 00 00         281
+height    4     int     A0 01 00 00         416
+unknown   4     int     01 00 00 00           1 // always 1
+size      4     int     00 0D 00 00        3328 // size = offset table + pixel data
+table   h*4     int     64 01 00 00         356 // line offset table: start address of \
+                                                //   each line (0 = start of pixel data), \
+                                                //   length = height*4
+
+pix.data  x   int/byte  [PIXEL DATA]            // x = size - offset table \
+                                                //   = size - (height*4)
+
+[PIXEL DATA]
+
+#t #o
+C7 00 = C7 transparent pixels, 0 opaque pixels
+
+#t #o       #t #o
+C3 01 84 59 02 01 84 61
+      -----       -----
+      color       color   = 16-Bit color (R5 G6 B5)
+
+#t = numTransparentPixels
+#o = numOpaquePixels
+
+last entry in each line is always a OpaquePixels-sequence
+
+for each line: sum(#t,#o) = width
+
+END [PIXEL DATA]
+
+end for // (numImg)
+
+end for // (numAnim)

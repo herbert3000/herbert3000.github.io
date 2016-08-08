@@ -1,0 +1,71 @@
+identifier	4	String	4E 49 42 53 (= "NIBS")
+numVertices	4	Int32	BC 02 00 00 (= 700)
+for (numVertices) {
+vertex_X	4	Single	00 00 1D 43 (= 157.0)
+vertex_Y	4	Single	00 50 27 45 (= 2677.0)
+} size=numVertices*8
+numSectors	4	Int32	E1 01 00 00 (= 481)
+for (numSectors) {
+numPoints	4	Int32
+kx		4	Single
+ky		4	Single
+bz		4	Single
+type		4	Int32	type:{0=normal,1=shallow water,2=snow/sand,3=deep water,4=conveyor)
+height		4	Int32
+offset		4	Int32
+flags		4	Int32	flags:{1=isStair/Ramp,2=isBridge?,4=isNotEnterable,8=?,16=isInvisible,64=isClimbable} default=384
+tokenLength	4	Int32
+Token		tokL	String
+for (numPoints) {
+pointID		4	Int32
+}
+}
+numBridgeSec	4	Int32
+for (numBridgeSec) {
+numPoints	4	Int32
+kx		4	Single
+ky		4	Single
+bz		4	Single
+type		4	Int32	
+height		4	Int32
+offset		4	Int32
+flags		4	Int32
+tokenLength	4	Int32
+Token		tL	String
+for (numPoints) {
+pointID		4	Int32
+}
+}
+numAreas	4	Int32	01 00 00 00
+for (numAreas) {
+numSectors	4	Int32	E2 01 00 00 (= 482)
+tokenLength	4	Int32	0A 00 00 00 (= 10)
+token		tL	String	43 41 4D 50 41 4D 45 4E 54 4F (= CAMPAMENTO)
+for (numSectors) {
+type		4	Int32	type:{0=normal sector,1=bridge sector}
+sectorID	4	Int32
+}
+}
+numConnections	4	Int32
+for (numConnections) {
+sectorID1	4	Int32
+sectorID2	4	Int32
+}
+TW1_ID		3	String	54 57 31 (= "TW1")
+for (numTotalBorders) {		numTotalBorders = SUM(numPoints) of all sectors
+neighbourSec	4	Int32	FF FF FF FF (= -1) means no neighbour(= map border)
+}
+TW2_ID		3	String	54 57 32 (= "TW2")
+while not (-1) {
+sectorID	4	Int32	# border "borderID" of sector "sectorID"
+borderID	4	Int32	# is connected to
+bridgeSecID	4	Int32	# border "bridgeBorderID" of bridge sector "bridgeSecID"
+bridgeBorderID	4	Int32
+}				# FF FF FF FF (= -1): end of section
+TW3_ID		3	String	54 57 33 (= "TW3")
+sectors that are under the bridge sectors
+for each bridge sector:
+  which sectors does it intersect?
+that's why some sectors appear multiple times in the list
+
+TW2 and TW3 are optional! Only try to read them, if EOF not reached!
